@@ -1,5 +1,6 @@
+from re import L
 import turtle
-# s = turtle.getscreen()
+s = turtle.getscreen()
 t = turtle.Turtle()
 t.clearstamps
 turtle.title("TicTacToe")
@@ -31,9 +32,7 @@ def draw_board():
     t.goto(75, 200)
     t.penup()
 
-    input("Waiting\n")
-
-# draw_board()
+draw_board()
 
 def circle_plays(choice):
     
@@ -170,31 +169,96 @@ def x_plays(choice):
         t.goto(175, -175)
         t.penup()
 
+
+def h_line1():
+    t.goto(-200, 150)
+    t.pendown()
+    t.goto(200, 150)
+    t.penup()
+def h_line2():
+    t.goto(-200, 0)
+    t.pendown()
+    t.goto(200, 0)
+    t.penup()
+def h_line3():
+    t.goto(-200, -150)
+    t.pendown()
+    t.goto(200, -150)
+    t.penup()
+def v_line1():
+    t.goto(-150, 200)
+    t.pendown()
+    t.goto(-150, -200)
+    t.penup()
+def v_line2():
+    t.goto(0, 200)
+    t.pendown()
+    t.goto(0, -200)
+    t.penup()
+def v_line3():
+    t.goto(150, 200)
+    t.pendown()
+    t.goto(150, -200)
+    t.penup()
+def d_line1():
+    t.goto(-200, -200)
+    t.pendown()
+    t.goto(200,200)
+    t.penup()
+def d_line2():
+    t.goto(-200, 200)
+    t.pendown()
+    t.goto(200, -200)
+
+
 #checks win condition
-def win_check(player, move_list, winner):
+def win_check(player, move_list):
     if "A1" in move_list and "A2" in move_list and "A3" in move_list:
         winner = True
+        h_line1()
         print( "{player} WINS!!".format(player = player))
         return winner
     elif "B1" in move_list and "B2" in move_list and "B3" in move_list:
         winner = True
+        h_line2()
         print( "{player} WINS!!".format(player = player))
         return winner
     elif "C1" in move_list and "C2" in move_list and "C3" in move_list:
         winner = True
+        h_line3()
         print( "{player} WINS!!".format(player = player))
         return winner
     elif "A1" in move_list and "B2" in move_list and "C3" in move_list:
         winner = True
+        d_line2()
         print( "{player} WINS!!".format(player = player))
         return winner
     elif "C1" in move_list and "B2" in move_list and "A3" in move_list:
         winner = True
+        d_line1()
         print( "{player} WINS!!".format(player = player))
+        return winner
+    elif "A1" in move_list and "B1" in move_list and "C1" in move_list:
+        winner = True
+        v_line1()
+        print( "{player} WINS!!".format(player = player))
+        return winner
+    elif "A2" in move_list and "B2" in move_list and "C2" in move_list:
+        winner = True
+        v_line2()
+        print( "{player} WINS!!".format(player = player))
+        return winner
+    elif "A3" in move_list and "B3" in move_list and "C3" in move_list:
+        winner = True
+        v_line3()
+        print( "{player} WINS!!".format(player = player))
+        return winner
+    elif move_set == []:
+        print("TIE GAME!")
+        winner = True
         return winner
     else:
         winner = False 
-        print("keep playing")
         return winner
 
 
@@ -207,18 +271,33 @@ player1 = input("Player 1 please enter name: ")
 player2 = input("Player 2 please enter name: ")
 
 #Game loop
-winner = False
-while winner == False:
-    choice = input("{player} choose you're next move ".format(player = player1))
+def player_turn(player, player_moves):
+    choice = input("{player} choose you're next move ".format(player = player))
     choice = choice.upper()
-    if choice not in move_set:
-        print("Invalid move.")
+    valid_choice = False
+    while valid_choice == False:
+        if choice not in move_set:
+            print("Invalid move.")
+            choice = input("{player} choose you"re next move ".format(player = player))
+            choice = choice.upper()
+        else:
+            valid_choice = True
+            
+    player_moves.append(choice)
+    move_set.remove(choice)
+    if player == player1:
+        circle_plays(choice)
     else:
-        player1_moves.append(choice)
-        move_set.remove(choice)
-        #circle_plays(choice)
-        print(player1_moves)
-        print(move_set)
-        win_check(player1, player1_moves, winner)
+        x_plays(choice)
 
 
+         
+win = False
+while win == False:
+    player_turn(player1, player1_moves)
+    win = win_check(player1, player1_moves)
+    if win == False:
+        player_turn(player2, player2_moves)
+        win = win_check(player2, player2_moves)
+
+input("Game OVER! \n Press any key to exit. ")
