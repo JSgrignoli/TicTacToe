@@ -278,7 +278,7 @@ def player_turn(player, player_moves):
     while valid_choice == False:
         if choice not in move_set:
             print("Invalid move.")
-            choice = input("{player} choose you"re next move ".format(player = player))
+            choice = input("{player} choose you're next move ".format(player = player))
             choice = choice.upper()
         else:
             valid_choice = True
